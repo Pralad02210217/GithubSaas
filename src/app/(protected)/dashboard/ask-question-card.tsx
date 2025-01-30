@@ -57,14 +57,14 @@ const AskQuestionCard = () => {
                         question,
                         answer,
                         fileReferences
-                    }), {
+                    }, {
                         onSuccess: () =>{
                             toast.success('Answer saved!')
                         },
                         onError: () =>{
                             toast.error("Failed to save answer")
                         }
-                    }
+                    })
                 }}>
                     Save Answer
                 </Button>
