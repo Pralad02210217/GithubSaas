@@ -11,6 +11,7 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { askQuestion } from './actions'
 import { readStreamableValue } from 'ai/rsc'
+import CodeReference from './code-references'
 
 const AskQuestionCard = () => {
     const { project } = useProject()
@@ -48,6 +49,8 @@ const AskQuestionCard = () => {
                 </DialogTitle>
             </DialogHeader>
             <MDEditor.Markdown source={answer} className='max-w-[70vw] !h-full max-h-[40vh] overflow-scroll' />
+            <div className="h-4"></div>
+            <CodeReference filesReferences={fileReferences} />
             <Button type='button' onClick={() => { setOpen(false)}}>
                 Close
             </Button>
