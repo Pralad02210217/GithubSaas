@@ -71,8 +71,8 @@ export async function askQuestion(question:string, projecId: string) {
         })();
 
     return {
-        Output: stream,
-        fileReferenced: result
+        output: stream.value,
+        fileReferences: result
     }
     
         
