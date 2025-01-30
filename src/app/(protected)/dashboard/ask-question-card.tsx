@@ -12,6 +12,8 @@ import React, { useState } from 'react'
 import { askQuestion } from './actions'
 import { readStreamableValue } from 'ai/rsc'
 import CodeReference from './code-references'
+import { api } from '@/trpc/react'
+import { toast } from 'sonner'
 
 const AskQuestionCard = () => {
     const { project } = useProject()
@@ -20,6 +22,7 @@ const AskQuestionCard = () => {
     const [loading, setLoading] = useState(false)
     const [fileReferences, setFileReferences] = useState<{ fileName:string; sourceCode:string; summary:string }[]>([])
     const [answer, setAnswer] = useState('')
+    const saveAnswer = api.project.saveAnswer.useMutation()
 
     const onSubmit = async(e: React.FormEvent<HTMLFormElement>) =>{
         setAnswer('')
@@ -42,13 +45,32 @@ const AskQuestionCard = () => {
   return (
     <>
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className='sm:max-w-[80vh]'>
+            <DialogContent className='sm:max-w-[80vw] max-h-[90vh] overflow-y-auto' >
             <DialogHeader>
+                <div className="flex items-center gap-2">
                 <DialogTitle>
                     <Image src='/logo.png' alt='githubsaas logo' width={32} height={32} />
                 </DialogTitle>
+                <Button disabled={saveAnswer.isPending} variant={'outline'} onClick={() =>{
+                    saveAnswer.mutate({
+                        projectId: project!.id,
+                        question,
+                        answer,
+                        fileReferences
+                    }), {
+                        onSuccess: () =>{
+                            toast.success('Answer saved!')
+                        },
+                        onError: () =>{
+                            toast.error("Failed to save answer")
+                        }
+                    }
+                }}>
+                    Save Answer
+                </Button>
+                </div>
             </DialogHeader>
-            <MDEditor.Markdown source={answer} className='max-w-[70vw] !h-full max-h-[40vh] overflow-scroll' />
+            <MDEditor.Markdown source={answer} className='max-w-[70vw] !h-full max-h-[40vh] overflow-y-scroll' />
             <div className="h-4"></div>
             <CodeReference filesReferences={fileReferences} />
             <Button type='button' onClick={() => { setOpen(false)}}>
