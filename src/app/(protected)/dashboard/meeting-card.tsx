@@ -1,5 +1,5 @@
 'use client'
-
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { uploadFile } from '@/lib/firebase'
@@ -45,6 +45,17 @@ const MeetingCard = () => {
                     </Button>
                 </div>
             </>
+        )}
+        {isUploading && (
+            <div className="">
+                <CircularProgressbar value={progress} text={`${progress}%`} className='size-20' styles={
+                    buildStyles({
+                        pathColor: '#2563eb',
+                        textColor: '#2563eb'
+                    })
+                }/>
+                <p className='text-sm text-gray-500 text-center'>Uploading your meeting...</p>
+            </div>
         )}
     </Card>
   )
